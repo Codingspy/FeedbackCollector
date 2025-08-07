@@ -10,6 +10,8 @@
       <option>General Suggestion</option>
     </select>
 
+    <button @click="exportCSV">Export CSV</button>
+
     <ul>
       <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
         <strong>{{ feedback.name }}</strong> ({{ feedback.category }}): {{ feedback.message }}
@@ -44,12 +46,39 @@ const filterFeedbacks = () => {
   }
 }
 
+const exportCSV = () => {
+  const rows = [
+    ["Name", "Category", "Message", "Created At"],
+    ...filteredFeedbacks.value.map(fb => [
+      fb.name,
+      fb.category,
+      fb.message,
+      fb.createdAt.toDate().toLocaleString()
+    ])
+  ]
+
+  let csvContent = "data:text/csv;charset=utf-8,"
+    + rows.map(e => e.map(field => `"${(field || '').toString().replace(/"/g, '""')}"`).join(",")).join("\n")
+
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement("a")
+  link.setAttribute("href", encodedUri)
+  link.setAttribute("download", "feedbacks.csv")
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 onMounted(fetchFeedbacks)
 </script>
 
 <style scoped>
 select {
-  margin-bottom: 15px;
+  margin-right: 10px;
   padding: 6px;
+}
+button {
+  padding: 6px 12px;
+  margin-bottom: 15px;
 }
 </style>
