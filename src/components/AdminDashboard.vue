@@ -24,6 +24,9 @@
       <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
         <strong>{{ feedback.name }}</strong> ({{ feedback.category }}): {{ feedback.message }}
       </li>
+      <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
+        <strong>{{ feedback.name }}</strong> ({{ feedback.category }}) [{{ feedback.sentiment }}]: {{ feedback.message }}
+      </li>
     </ul>
   </div>
 </template>

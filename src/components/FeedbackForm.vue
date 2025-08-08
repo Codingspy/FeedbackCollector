@@ -24,6 +24,7 @@
 import { ref } from 'vue'
 import { db } from '../firebase'
 import { collection, addDoc, Timestamp } from 'firebase/firestore'
+import axios from 'axios'
 
 const name = ref('')
 const category = ref('')
@@ -44,6 +45,30 @@ const submitFeedback = async () => {
     message.value = ''
   } catch (error) {
     console.error("Error adding feedback: ", error)
+  }
+
+   try {
+    // Call Python API first
+    const response = await axios.post('http://127.0.0.1:5000/analyze', {
+      text: message.value
+    })
+    const sentiment = response.data.sentiment
+
+    // Then save to Firestore with sentiment
+    await addDoc(collection(db, 'feedbacks'), {
+      name: name.value,
+      category: category.value,
+      message: message.value,
+      sentiment: sentiment,
+      createdAt: Timestamp.now()
+    })
+
+    successMessage.value = `Thank you! Your feedback was marked as ${sentiment}.`
+    name.value = ''
+    category.value = ''
+    message.value = ''
+  } catch (error) {
+    console.error("Error:", error)
   }
 }
 </script>
