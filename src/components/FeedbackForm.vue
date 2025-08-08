@@ -1,20 +1,19 @@
 <template>
   <div>
     <h2>Submit Feedback</h2>
-    <form @submit.prevent="submitFeedback">
-      <input v-model="name" placeholder="Your Name" required />
+    <form @submit.prevent="submitFeedback" class="bg-white shadow p-6 rounded max-w-lg mx-auto mt-8">
+  <input class="border p-2 w-full mb-4" v-model="name" placeholder="Your Name" required />
+  <select class="border p-2 w-full mb-4" v-model="category" required>
+    <option disabled value="">Select Category</option>
+    <option>Bug Report</option>
+    <option>Feature Request</option>
+    <option>General Suggestion</option>
+  </select>
+  <textarea class="border p-2 w-full mb-4" v-model="message" placeholder="Your Feedback" required></textarea>
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Submit Feedback</button>
+  <p v-if="successMessage" class="mt-4 text-green-600">{{ successMessage }}</p>
+</form>
 
-      <select v-model="category" required>
-        <option disabled value="">Select Category</option>
-        <option>Bug Report</option>
-        <option>Feature Request</option>
-        <option>General Suggestion</option>
-      </select>
-
-      <textarea v-model="message" placeholder="Your Feedback" required></textarea>
-
-      <button type="submit">Submit</button>
-    </form>
 
     <p v-if="successMessage">{{ successMessage }}</p>
   </div>

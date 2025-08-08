@@ -20,11 +20,8 @@
     <button @click="exportCSV">Export CSV</button>
     <button @click="logout">Logout</button>
 
-    <ul>
-      <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
-        <strong>{{ feedback.name }}</strong> ({{ feedback.category }}): {{ feedback.message }}
-      </li>
-      <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
+    <ul class="bg-gray-100 p-4 rounded">
+     <li v-for="feedback in filteredFeedbacks" :key="feedback.id" class="border-b py-2">
         <strong>{{ feedback.name }}</strong> ({{ feedback.category }}) [{{ feedback.sentiment }}]: {{ feedback.message }}
       </li>
     </ul>
