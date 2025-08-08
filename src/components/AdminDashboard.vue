@@ -2,6 +2,13 @@
   <div>
     <h2>Admin Dashboard</h2>
 
+    <div class="summary">
+      <p><strong>Total Feedbacks:</strong> {{ feedbacks.length }}</p>
+      <p><strong>Bug Reports:</strong> {{ bugCount }}</p>
+      <p><strong>Feature Requests:</strong> {{ featureCount }}</p>
+      <p><strong>General Suggestions:</strong> {{ suggestionCount }}</p>
+    </div>
+
     <label>Filter by Category:</label>
     <select v-model="selectedCategory" @change="filterFeedbacks">
       <option value="">All</option>
@@ -21,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { db } from '../firebase'
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 
@@ -69,10 +76,21 @@ const exportCSV = () => {
   document.body.removeChild(link)
 }
 
+// ✅ Summary Computed:
+const bugCount = computed(() => feedbacks.value.filter(fb => fb.category === 'Bug Report').length)
+const featureCount = computed(() => feedbacks.value.filter(fb => fb.category === 'Feature Request').length)
+const suggestionCount = computed(() => feedbacks.value.filter(fb => fb.category === 'General Suggestion').length)
+
 onMounted(fetchFeedbacks)
 </script>
 
 <style scoped>
+.summary {
+  background: #f2f2f2;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
 select {
   margin-right: 10px;
   padding: 6px;
