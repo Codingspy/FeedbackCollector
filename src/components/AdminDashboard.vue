@@ -18,6 +18,7 @@
     </select>
 
     <button @click="exportCSV">Export CSV</button>
+    <button @click="logout">Logout</button>
 
     <ul>
       <li v-for="feedback in filteredFeedbacks" :key="feedback.id">
@@ -31,6 +32,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { db } from '../firebase'
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { getAuth, signOut } from 'firebase/auth'
+import { useRouter } from 'vue-router'
 
 const feedbacks = ref([])
 const filteredFeedbacks = ref([])
@@ -51,6 +54,14 @@ const filterFeedbacks = () => {
       fb => fb.category === selectedCategory.value
     )
   }
+}
+
+const router = useRouter()
+
+const logout = async () => {
+  const auth = getAuth()
+  await signOut(auth)
+  router.push('/login')
 }
 
 const exportCSV = () => {
